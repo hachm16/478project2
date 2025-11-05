@@ -1,0 +1,33 @@
+#ifndef GENERATOR_H
+#define GENERATOR_H
+
+#include <string>
+#include "randomgenerator.h"
+
+
+using namespace std;
+
+struct GeneratorConfig {
+    unsigned seed; //no negatives
+
+    int timeBetweenArrivalSampleCount;
+
+
+    GeneratorConfig();
+};
+
+
+class Generator {
+public:
+    Generator();
+
+    void configure(const GeneratorConfig &cfg);
+
+    void generatetimeBetweenArrivalCSV();
+
+    GeneratorConfig config;
+    RandomGenerator rng;
+    string outPath(const string &baseName);
+};
+
+#endif // GENERATOR_H
