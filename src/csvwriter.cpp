@@ -2,7 +2,10 @@
 #include <fstream>
 using namespace std;
 
-CsvWriter::CsvWriter(const string& path) {
+
+
+CsvWriter::CsvWriter(const string &path)
+{
     filePath = path;  //output file path, buffer start empty
 }
 

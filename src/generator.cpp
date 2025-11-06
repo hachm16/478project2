@@ -8,12 +8,12 @@
 
 GeneratorConfig::GeneratorConfig()
 {
-    seed = 123; //default value just for setup
+    seed = 125; //default value just for setup
     timeBetweenArrivalSampleCount = 200; // arrival times to generate for arrivals CSV
 }
 
 
-Generator::Generator(){}
+Generator::Generator(){} //no vars, constructor call
 
 
 

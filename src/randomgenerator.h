@@ -1,7 +1,6 @@
 #ifndef RANDOMGENERATOR_H
 #define RANDOMGENERATOR_H
 
-
 using namespace std;
 #include <cstdlib>
 
@@ -29,7 +28,7 @@ public:
 
     void reseed(unsigned seed);
     int randomInclusive(int low, int high);
-    int roundUpTo(int value, int unit);
+
 
     randEngine rngGenerator;
 };

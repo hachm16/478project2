@@ -13,7 +13,7 @@ public:
 
     string filePath;
     string buffer;
-    string join(const vector<string> &v); //commas
+    string join(const vector<string> &v); // for commas
 };
 
 #endif // CSVWRITER_H

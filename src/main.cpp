@@ -15,22 +15,35 @@ using namespace std;
 //
 int main(int argc, char* argv[])
 {
-    cout << "\nPart 1 generator starting." << endl;
 
     GeneratorConfig config; //seed and timeBetweenArrivalSampleCount set default
 
-    int i = 1;
-    while (i < argc) //loop for parsing
+//argv[1] is long --seed string on CL, argv[2] is the actual seed val, 3 is --samplecount, 4 being actual sample count num
+
+    //argc = 5 bc program name + above args
+
+    int i = 1; //skip title element
+    while (i < argc) //loop for parsing for args, stop b4 out of bound
     {
         string a = argv[i];
-        if (a == "--seed") //rng unsigned seed
+        if (a == "--seed") //set rng seed case
         {
-            if (i + 1 < argc) { config.seed = (unsigned)stoi(string(argv[i+1])); i += 2; }
+            if (i+1 < argc) // <5
+            {
+                config.seed = (unsigned)stoi(string(argv[i+1])); //cast seed token and store int
+                i += 2; //go next, over --seed and its value
+            }
         }
 
-        else if (a == "--timeBetweenArrivalSampleCount") //how many arrival times to gen
-        {
-            if (i + 1 < argc) { config.timeBetweenArrivalSampleCount = stoi(string(argv[i+1])); i += 2; } // make into int value and set
+        else if (a == "--timeBetweenArrivalSampleCount")
+        { //how many indicies to generate for rand samples
+            if (i + 1 < argc) // ensure a next token before reading
+            {
+                config.timeBetweenArrivalSampleCount = stoi(string(argv[i+1]));
+                // store int from string
+
+                i += 2; // same as above
+            }
         }
     }
 
@@ -44,5 +57,3 @@ int main(int argc, char* argv[])
 
     return 0;
 }
-//example run ("--" long for setting user seed)
-//.\478project2.exe --seed 12345 --timeBetweenArrivalSampleCount 200

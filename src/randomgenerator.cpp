@@ -2,7 +2,7 @@
 
 
 RandomGenerator::RandomGenerator() {
-    rngGenerator.seed(123);//fixed seed so runs are repeatable
+    rngGenerator.seed(125);//fixed seed so runs are repeatable
 }
 
 RandomGenerator::RandomGenerator(unsigned seed) {
@@ -12,7 +12,7 @@ RandomGenerator::RandomGenerator(unsigned seed) {
 
 void RandomGenerator::reseed(unsigned seed) {
     //change the seed after construction
-    rngGenerator.seed(seed); //reset state to start new random sequence
+    rngGenerator.seed(seed); //reset state to start new rand numbers
 }
 
 int RandomGenerator::randomInclusive(int low, int high) {
@@ -23,20 +23,13 @@ int RandomGenerator::randomInclusive(int low, int high) {
         high = tmp;
     } // swap if reversed
 
-    int range = (high - low) + 1; // count of ints in [low, high]
+    int range = (high - low) + 1; // count of ints in low-high
 
     unsigned int rawrng = rngGenerator();
     int offset = rawrng % range;
-    int mapped = low + offset; // shift into [low, high] range
+    int mapped = low + offset; // shift into low-high range
     return mapped;
 
 }
 
 
-
-int RandomGenerator::roundUpTo(int value, int unit) {
-    // round up value to nearest multiple
-    int remainder = value % unit;     // get how far past the last multiple
-    if (remainder == 0) return value;  // fine already
-    else return value + (unit - remainder); // bump up to next multiple
-}
