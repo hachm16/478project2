@@ -40,7 +40,7 @@ void Generator::generatetimeBetweenArrivalCSV() //generate csv of arrival times
     CsvWriter writer(outPath("timeBetweenArrival")); //open csv writer
     writer.header({"index","arrivalTime"});
 
-    for (int i = 0; i < config.timeBetweenArrivalSampleCount; i++) //requested number of arrivals
+    for (int i = 0; i < config.timeBetweenArrivalSampleCount; i++) //requested number of ind
     {
         int baseTime = 1 + 3*i;              // base times like 1,4,7...
         int randomOffset = rng.randomInclusive(0, 4);  //3 +- 2

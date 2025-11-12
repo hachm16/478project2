@@ -8,6 +8,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include "memorysimulation.h"
 
 using namespace std;
 
@@ -55,5 +56,25 @@ int main(int argc, char* argv[])
     generator.generatetimeBetweenArrivalCSV(); //write to out/timeBetweenArrival.csv
 
 
+    SimulationConfig simulationConfig;
+    simulationConfig.seed = config.seed; // reuse same seed as generator
+
+    simulationConfig.testName = "test1";
+    simulationConfig.percentSmall = 33;
+    simulationConfig.percentMedium = 33;
+    simulationConfig.percentLarge = 34;
+    simulationConfig.memoryUnitSize = 8;
+    simulationConfig.memoryUnitCount = 5000;
+    simulationConfig.summaryFilePath = "out/summary.csv";
+    simulationConfig.logFileFirstFit = "out/log_firstfit.csv";
+    simulationConfig.logFileNextFit = "out/log_nextfit.csv";
+    simulationConfig.logFileBestFit = "out/log_bestfit.csv";
+    simulationConfig.logFileWorstFit = "out/log_worstfit.csv";
+
+    MemorySimulation simulation;
+    simulation.configure(simulationConfig);
+    simulation.run();
+
     return 0;
 }
+
