@@ -1,0 +1,9 @@
+I verified the output with three checks.
+
+First, I ran with a fixed seed (123), then confirmed each row
+follows arrivalTime = (1 + 3index) + [0,4](offset).
+
+Second, the file index increments by 1 and the row count equals 
+requested sample count.
+
+Finally, I reran with a different seed and observed different numbers.
