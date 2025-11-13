@@ -96,16 +96,14 @@ MemorySimulation::Job MemorySimulation::createRandomJob(int jobIdValue, int arri
 
 void MemorySimulation::createHeapElementsForJob(const Job &job)
 {
-    if (job.heapElementCount <= 0 || job.runTime <= 0)
-    {
-        return;
-    }
+    if (job.heapElementCount <= 0 || job.runTime <= 0) return;
+    if ((int)heapElements.size() > 20000) return;
+    // hard cap total heap element (its taking insanely long)
+
 
     int perTime = job.heapElementCount / job.runTime;
-    if (perTime <= 0)
-    {
-        perTime = 1;
-    }
+    if (perTime <= 0) perTime = 1;
+
 
     for (int t = 0; t < job.runTime; t++)
     {
@@ -266,6 +264,7 @@ void MemorySimulation::buildEvents()
     }
 }
 
+
 void MemorySimulation::logAllocation(CsvWriter &writer, int time, int jobId, int sizeBytes, int location)
 {
     vector<string> rowValues;
@@ -418,6 +417,21 @@ void MemorySimulation::run()
     buildJobsAndHeapElements();
     buildEvents();
 
+
+    int lastEventTime = 0;
+    if (!events.empty())
+    {
+        lastEventTime = events[(int)events.size() - 1].time;
+    }
+
+    int prefillTime = 2000;     // keep prefill
+    int endTime = lastEventTime;
+    if (endTime < prefillTime)  // ensure we reach prefill for sampling
+    {
+        endTime = prefillTime;
+    }
+
+
     CsvWriter summaryWriter(config.summaryFilePath);
     vector<string> summaryHeader;
     summaryHeader.push_back("time");
@@ -449,8 +463,8 @@ void MemorySimulation::run()
     logBF.header(logHeader);
     logWF.header(logHeader);
 
-    int prefillTime = 2000;
-    int endTime = 12000;
+
+    int sampleInterval=200;
 
     for (int time = 0; time <= endTime; time++)
     {
