@@ -25,7 +25,7 @@ From the build directory:
 Example
 478project2.exe --seed 0 --memoryUnitSize 8 --memoryUnitCount 5000 \
  --percentSmall 33 --percentMedium 33 --percentLarge 34 \
- --timeBetweenArrivalSampleCount 10 --testName MU8
+ --timeBetweenArrivalSampleCount 10 --testName MEM8
 
 Output Files (in /out/)
 
