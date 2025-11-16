@@ -1,0 +1,5 @@
+time,algorithm,allocatedBytes,freeBytes,requiredBytes,externalFragments,percentMemoryInUse,percentMemoryFree,percentInternalFragmentation
+2000,FF,1896,2104,1850,4,47,52,2
+2000,NF,1896,2104,1850,3,47,52,2
+2000,BF,1896,2104,1850,8,47,52,2
+2000,WF,1896,2104,1850,4,47,52,2
