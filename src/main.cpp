@@ -13,63 +13,228 @@
 using namespace std;
 
 
-//
+
+void printUsage()
+{
+
+    cout<<"Options:" << endl;
+    cout<<"--seed <unsigned>                        Seed for random number generator" << endl;
+    cout<<"--timeBetweenArrivalSampleCount <int>    Number of arrival samples" << endl;
+    cout<<"--percentSmall <int>                     Small jobs percent" << endl;
+    cout<<"--percentMedium <int>                    Medium jobs percent" << endl;
+    cout<<"--percentLarge <int>                     Large jobs percent" << endl;
+    cout<<"--memoryUnitSize <int>                   Memory unit size (must be multiple of 8)" << endl;
+    cout<<"--memoryUnitCount <int>                  Number of memory units" << endl;
+    cout<<"--testName <string>                      Simulation test name" << endl;
+    cout<<"--summaryFilePath <string>               Summary CSV output path" << endl;
+    cout<<"--logFileFirstFit <string>               First Fit log CSV output path" << endl;
+    cout<<"--logFileNextFit <string>                Next Fit log CSV output path" << endl;
+    cout<<"--logFileBestFit <string>                Best Fit log CSV output path" << endl;
+    cout<<"--logFileWorstFit <string>               Worst Fit log CSV output path" << endl;
+
+
+    cout<<"Note: percentSmall + percentMedium + percentLarge must equal 100." << endl;
+}
+
+
+
+
+
 int main(int argc, char* argv[])
 {
 
-    GeneratorConfig config; //seed and timeBetweenArrivalSampleCount set default
+    GeneratorConfig generatorConfig;
 
-//argv[1] is long --seed string on CL, argv[2] is the actual seed val, 3 is --samplecount, 4 being actual sample count num
+    SimulationConfig simulationConfig;
 
-    //argc = 5 bc program name + above args
+    simulationConfig.seed= generatorConfig.seed;
+    // keep simulation seed in sync with generator
 
-    int i = 1; //skip title element
+
+
+
+    int i= 1; //skip title element
     while (i < argc) //loop for parsing for args, stop b4 out of bound
     {
         string a = argv[i];
+
+
         if (a == "--seed") //set rng seed case
         {
-            if (i+1 < argc) // <5
+            if (i+1 < argc)
             {
-                config.seed = (unsigned)stoi(string(argv[i+1])); //cast seed token and store int
-                i += 2; //go next, over --seed and its value
+                unsigned seedValue= (unsigned)stoi(string(argv[i + 1]));
+                generatorConfig.seed= seedValue;
+                simulationConfig.seed= seedValue;
+                i += 2;
+                //cast seed token and store int
+                //go next, over --seed and its value
             }
+            else break;
         }
 
         else if (a == "--timeBetweenArrivalSampleCount")
         { //how many indicies to generate for rand samples
             if (i + 1 < argc) // ensure a next token before reading
             {
-                config.timeBetweenArrivalSampleCount = stoi(string(argv[i+1]));
+                generatorConfig.timeBetweenArrivalSampleCount = stoi(string(argv[i+1]));
                 // store int from string
 
                 i += 2; // same as above
             }
+            else break;
         }
+
+
+        else if (a =="--percentSmall")
+        {
+            if (i + 1 < argc)
+            {
+                simulationConfig.percentSmall = stoi(string(argv[i + 1]));
+                i += 2;
+            }
+            else break;
+        }
+
+
+        else if (a == "--percentMedium")
+        {
+            if (i + 1 < argc)
+            {
+                simulationConfig.percentMedium = stoi(string(argv[i + 1]));
+                i += 2;
+            }
+            else break;
+        }
+
+
+        else if (a== "--percentLarge")
+        {
+            if (i + 1 < argc)
+            {
+                simulationConfig.percentLarge = stoi(string(argv[i + 1]));
+                i += 2;
+            }
+            else break;
+        }
+
+
+        else if (a =="--memoryUnitSize")
+        {
+            if (i + 1 < argc)
+            {
+                simulationConfig.memoryUnitSize = stoi(string(argv[i + 1]));
+                i += 2;
+            }
+            else break;
+        }
+
+
+        else if (a =="--memoryUnitCount")
+        {
+            if (i + 1 < argc)
+            {
+                simulationConfig.memoryUnitCount = stoi(string(argv[i + 1]));
+                i += 2;
+            }
+            else break;
+        }
+
+
+        else if (a =="--testName")
+        {
+            if (i + 1 < argc)
+            {
+                simulationConfig.testName = string(argv[i + 1]);
+                i += 2;
+            }
+            else break;
+        }
+
+
+        else if (a =="--summaryFilePath")
+        {
+            if (i + 1 < argc)
+            {
+                simulationConfig.summaryFilePath = string(argv[i + 1]);
+                i += 2;
+            }
+            else break;
+        }
+
+
+        else if (a =="--logFileFirstFit")
+        {
+            if (i + 1 < argc)
+            {
+                simulationConfig.logFileFirstFit = string(argv[i + 1]);
+                i += 2;
+            }
+            else break;
+        }
+
+
+        else if (a =="--logFileNextFit")
+        {
+            if (i + 1 < argc)
+            {
+                simulationConfig.logFileNextFit = string(argv[i + 1]);
+                i += 2;
+            }
+            else break;
+
+        }
+
+
+        else if (a =="--logFileBestFit")
+        {
+            if (i + 1 < argc)
+            {
+                simulationConfig.logFileBestFit = string(argv[i + 1]);
+                i += 2;
+            }
+            else break;
+        }
+
+
+        else if (a =="--logFileWorstFit")
+        {
+            if (i + 1 < argc)
+            {
+                simulationConfig.logFileWorstFit = string(argv[i + 1]);
+                i += 2;
+            }
+            else break;
+        }
+
+
+        //unknown arg, skip
+        else i++;
     }
 
+    // finished parsing args
 
+    // validate percentages for simulation
+    int totalPercent = simulationConfig.percentSmall + simulationConfig.percentMedium+ simulationConfig.percentLarge;
+
+    if (totalPercent != 100)
+    {
+        cout << "Error: percentSmall + percentMedium + percentLarge must add up to 100." << endl;
+        return 1;
+    }
+
+    // validate memory configuration
+    if (simulationConfig.memoryUnitSize <= 0 || simulationConfig.memoryUnitSize % 8 != 0 || simulationConfig.memoryUnitCount <= 0)
+    {
+        cout << "Invalid configuration. Exiting" << endl;
+        return 1;
+    }
 
     Generator generator;
-    generator.configure(config);
+    generator.configure(generatorConfig);
+    generator.generatetimeBetweenArrivalCSV();
 
-    generator.generatetimeBetweenArrivalCSV(); //write to out/timeBetweenArrival.csv
-
-
-    SimulationConfig simulationConfig;
-    simulationConfig.seed = config.seed; // reuse same seed as generator
-
-    simulationConfig.testName = "test1";
-    simulationConfig.percentSmall = 33;
-    simulationConfig.percentMedium = 33;
-    simulationConfig.percentLarge = 34;
-    simulationConfig.memoryUnitSize = 8;
-    simulationConfig.memoryUnitCount = 5000;
-    simulationConfig.summaryFilePath = "out/summary.csv";
-    simulationConfig.logFileFirstFit = "out/log_firstfit.csv";
-    simulationConfig.logFileNextFit = "out/log_nextfit.csv";
-    simulationConfig.logFileBestFit = "out/log_bestfit.csv";
-    simulationConfig.logFileWorstFit = "out/log_worstfit.csv";
+    cout<<"Running simulation for test: " << simulationConfig.testName << endl;
 
     MemorySimulation simulation;
     simulation.configure(simulationConfig);
@@ -77,4 +242,5 @@ int main(int argc, char* argv[])
 
     return 0;
 }
+
 

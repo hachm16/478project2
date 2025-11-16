@@ -9,7 +9,7 @@
 
 using namespace std;
 
-struct SimulationConfig
+struct SimulationConfig //inputs for running
 {
     string testName;
 
@@ -23,13 +23,14 @@ struct SimulationConfig
     unsigned seed;
 
     string summaryFilePath;
-    string logFileFirstFit;
+    string logFileFirstFit;  //paths
     string logFileNextFit;
     string logFileBestFit;
     string logFileWorstFit;
 
     SimulationConfig();
 };
+
 
 class MemorySimulation
 {
@@ -39,11 +40,10 @@ public:
     void configure(const SimulationConfig &cfg);
     void run();
 
-private:
     struct Job
     {
         int jobId;
-        char jobType; // 'S', 'M', 'L'
+        char jobType; //S,M,L
         int arrivalTime;
         int runTime;
         int codeSize;
@@ -62,7 +62,7 @@ private:
         }
     };
 
-    struct HeapElement
+    struct HeapElement //singular heap alloc for a job
     {
         int elementId;
         int jobId;
@@ -79,10 +79,7 @@ private:
             sizeBytes = 0;
         }
 
-        int getDepartureTime() const
-        {
-            return arrivalTime + lifetime;
-        }
+        int getDepartureTime() const; //when element free
     };
 
     struct Event
@@ -90,7 +87,7 @@ private:
         int time;
         int jobId;
         int elementId;
-        int eventType; // 0 = job arrive, 1 = job depart, 2 = heap alloc, 3 = heap free
+        int eventType; // 0=job arrive  1=job depart  2=heap alloc   3=heap free
 
         Event()
         {
@@ -104,7 +101,19 @@ private:
     SimulationConfig config;
     RandomGenerator rng;
 
-    MemoryAllocator allocatorFirstFit;
+
+    int heapAllocCountFF; //successfully alloc'd heap elements per type
+    int heapAllocCountNF;
+    int heapAllocCountBF;
+    int heapAllocCountWF;
+
+    int heapAllocBytesFF;
+    int heapAllocBytesNF;
+    int heapAllocBytesBF;
+    int heapAllocBytesWF;
+
+
+    MemoryAllocator allocatorFirstFit;  //mem alloc per alg
     MemoryAllocator allocatorNextFit;
     MemoryAllocator allocatorBestFit;
     MemoryAllocator allocatorWorstFit;
@@ -113,7 +122,7 @@ private:
     vector<HeapElement> heapElements;
     vector<Event> events;
 
-    // remember locations so we can free correctly
+    // remember locations so we can free
     vector<int> jobCodeLocationFF;
     vector<int> jobStackLocationFF;
     vector<int> jobCodeLocationNF;
@@ -128,23 +137,41 @@ private:
     vector<int> heapLocationBF;
     vector<int> heapLocationWF;
 
+//-/-/
+    int sampleCount;
+    int sumPercentInUseFF;
+    int sumPercentInUseNF;
+    int sumPercentInUseBF;
+    int sumPercentInUseWF;
+    int sumPercentInternalFF;
+    int sumPercentInternalNF;
+    int sumPercentInternalBF;
+    int sumPercentInternalWF;
+    int maxPercentInUseFF;
+    int maxPercentInUseNF;
+    int maxPercentInUseBF;
+    int maxPercentInUseWF;
+    int maxExternalFragFF;
+    int maxExternalFragNF;
+    int maxExternalFragBF;
+    int maxExternalFragWF;
+//-////-/
+
     void initializeAllocators();
 
-    int chooseJobType();
-    Job createRandomJob(int jobIdValue, int arrivalTime);
+    int chooseJobType(); // return 0/1/2 for S/M/L
+
+    Job createRandomJob(int jobIdValue, int arrivalTime); //
+
     void createHeapElementsForJob(const Job &job);
 
-    void buildJobsAndHeapElements();
-    void buildEvents();
+    void buildJobsAndHeapElements(); //gen all jobs and heap elements
+    void buildEvents();  // conv into events
 
-    void processEventsAtTime(int currentTime,
-                             CsvWriter &logFF,
-                             CsvWriter &logNF,
-                             CsvWriter &logBF,
-                             CsvWriter &logWF);
+    void processEventsAtTime(int currentTime, CsvWriter &logFF, CsvWriter &logNF, CsvWriter &logBF, CsvWriter &logWF);
 
-    void logAllocation(CsvWriter &writer, int time, int jobId, int sizeBytes, int location);
-    void logFree(CsvWriter &writer, int time, int jobId, int location);
+    void logAllocation(CsvWriter &writer, int time, int jobId, int sizeBytes, int location); //alloc log row
+    void logFree(CsvWriter &writer, int time, int jobId, int location); //free log row
 };
 
 #endif // MEMORYSIMULATION_H

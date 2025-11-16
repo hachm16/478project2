@@ -8,8 +8,10 @@
 
 GeneratorConfig::GeneratorConfig()
 {
-    seed = 125; //default value just for setup
-    timeBetweenArrivalSampleCount = 200; // arrival times to generate for arrivals CSV
+    seed = 125; //default values just for setup
+    timeBetweenArrivalSampleCount = 10;
+    processSampleCount = 10;
+    heapSampleProcessCount = 10;
 }
 
 
@@ -42,7 +44,7 @@ void Generator::generatetimeBetweenArrivalCSV() //generate csv of arrival times
 
     for (int i = 0; i < config.timeBetweenArrivalSampleCount; i++) //requested number of ind
     {
-        int baseTime = 1 + 3*i;              // base times like 1,4,7...
+        int baseTime = 1 + (3*i);              // base times like 1,4,7...
         int randomOffset = rng.randomInclusive(0, 4);  //3 +- 2
         int arrival = baseTime + randomOffset; //abs arrival time
         writer.row({to_string(i), to_string(arrival)});

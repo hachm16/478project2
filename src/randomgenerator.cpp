@@ -1,21 +1,25 @@
 #include "randomgenerator.h"
 
 
-RandomGenerator::RandomGenerator() {
+RandomGenerator::RandomGenerator()
+{
     rngGenerator.seed(125);//fixed seed so runs are repeatable
 }
 
-RandomGenerator::RandomGenerator(unsigned seed) {
+RandomGenerator::RandomGenerator(unsigned seed)
+{
         // arg constructor with user seed
     rngGenerator.seed(seed);
 }
 
-void RandomGenerator::reseed(unsigned seed) {
+void RandomGenerator::reseed(unsigned seed)
+{
     //change the seed after construction
     rngGenerator.seed(seed); //reset state to start new rand numbers
 }
 
-int RandomGenerator::randomInclusive(int low, int high) {
+int RandomGenerator::randomInclusive(int low, int high)
+{
     if (low > high)
     {
         int tmp = low;

@@ -10,7 +10,9 @@ using namespace std;
 struct GeneratorConfig {
     unsigned seed; //no negatives
 
-    int timeBetweenArrivalSampleCount;
+    int timeBetweenArrivalSampleCount;  // how many arrival samples to generate
+    int processSampleCount;    // rows to gen
+    int heapSampleProcessCount;    //heap sample processes to gen
 
 
     GeneratorConfig();

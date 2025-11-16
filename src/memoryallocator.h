@@ -16,13 +16,14 @@ struct AllocationRecord
 
     AllocationRecord()
     {
-        startIndex = -1;
+        startIndex = -1; //index and id -1 out of the way
         unitCount = 0;
         requestedBytes = 0;
         jobId = -1;
         isActive = false;
     }
 };
+
 
 class MemoryAllocator
 {
@@ -31,24 +32,23 @@ public:
 
     void configure(int memoryUnitSizeValue, int memoryUnitCountValue, const string &algorithmNameValue);
 
-    // memory assignment algorithms
+    // algorithms for each memory
     int mallocFF(int sizeBytes);
     int mallocNF(int sizeBytes);
     int mallocBF(int sizeBytes);
     int mallocWF(int sizeBytes);
 
-    // free memory starting at a location
+    // free memory method to start somewhere
     void freeFF(int startIndex);
 
-    // tell allocator which job is currently making the request
+    // tell allocator which job is making request
     void setCurrentJobId(int jobIdValue);
 
-    // basic metrics
+    // metrics
     int getTotalMemorySize();
     int getAllocatedMemorySize();
     int getFreeMemorySize();
     int getRequiredMemorySize();
-
     int getExternalFragmentationCount();
     int getLargestFreeBlockSize();
     int getSmallestFreeBlockSize();
@@ -57,15 +57,13 @@ public:
     int getNumberOfAllocationOperations();
     int getNumberOfFreeRequests();
     int getNumberOfFreeOperations();
-    int getFailedAllocationCount();
 
     string algorithmName;
 
-private:
     int memoryUnitSize;
     int memoryUnitCount;
 
-    // -1 = free, otherwise job id
+    // -1 = free, else id
     vector<int> unitJobId;
     vector<AllocationRecord> allocations;
 
@@ -77,9 +75,8 @@ private:
     int allocationOperationCount;
     int freeRequestCount;
     int freeOperationCount;
-    int failedAllocationCount;
 
-    int allocateFirstFit(int requiredUnits);
+    int allocateFirstFit(int requiredUnits); //method per type
     int allocateNextFit(int requiredUnits);
     int allocateBestFit(int requiredUnits);
     int allocateWorstFit(int requiredUnits);
